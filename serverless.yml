@@ -1,0 +1,42 @@
+service: simple-ts-api
+
+provider:
+  name: google
+  stage: dev
+  runtime: nodejs10.x
+  region: us-central1
+  project: my-project
+  credentials: ~/.gcloud/keyfile.json
+  environment:
+    STAGE: ${self:provider.stage}
+    GOOGLE_APPLICATION_CREDENTIALS: ${self:provider.credentials}
+    SERVERLESS_EXPRESS_PLATFORM: google
+    SERVICE: ${self:service}
+    TYPEORM_DATABASE: database-name-${self:provider.stage}
+    TYPEORM_HOST: ${self:custom.TYPEORM_HOST.${self:provider.stage}}
+    TYPEORM_PASSWORD: ${self:custom.TYPEORM_PASSWORD.${self:provider.stage}}
+    TYPEORM_USERNAME: ${self:custom.TYPEORM_USERNAME.${self:provider.stage}}
+
+custom:
+  TYPEORM_HOST:
+    dev: "localhost"
+  TYPEORM_PASSWORD:
+    dev: "password"
+  TYPEORM_USERNAME:
+    dev: "postgres"
+
+plugins:
+  - serverless-google-cloudfunctions
+
+package:
+  exclude:
+    - node_modules/**
+    - .gitignore
+    - src
+    - .git/**
+
+functions:
+  server:
+    handler: dist.server
+    events:
+      - http: dist.server
