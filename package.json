@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "passport": "^0.4.1",
